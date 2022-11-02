@@ -57,7 +57,7 @@ function App ({ classes }) {
     <Scoreboard key='scoreboard' path='/scores' name='Scoreboard' />,
     <Profile key='multiProfile' path='/profile/:uuid' />,
     <Verify key='verify' path='/verify' />,
-    <CtftimeCallback key='ctftimeCallback' path='/integrations/ctftime/callback' />
+    <CtftimeCallback key='ctftimeCallback' path='/integrations/ctftime/callback' />,
     <DiscordCallback key='discordCallback' path='/integrations/discord/callback' />
   ]
 
