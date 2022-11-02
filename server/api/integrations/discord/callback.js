@@ -34,7 +34,9 @@ export default {
         form: {
           client_id: config.discord.clientId,
           client_secret: config.discord.clientSecret,
-          code: req.body.discordCode
+          grant_type: 'authorization_code',
+          code: req.body.discordCode,
+          redirect_uri: config.origin + '/integrations/discord/callback'
         }
       }))
     } catch (e) {
@@ -54,13 +56,13 @@ export default {
       return responses.badDiscordCode
     }
     const token = await auth.token.getToken(auth.token.tokenKinds.discordAuth, {
-      name: userBody.username,
-      discordId: userBody.id
+      name: userBody.user.username,
+      discordId: userBody.user.id
     })
     return [responses.goodDiscordToken, {
       discordToken: token,
-      discordName: userBody.username,
-      discordId: userBody.id
+      discordName: userBody.user.username,
+      discordId: userBody.user.id
     }]
   }
 }

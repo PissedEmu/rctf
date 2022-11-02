@@ -25,6 +25,7 @@ export default () => {
     `?scope=${encodeURIComponent('identify')}` +
     `&client_id=${encodeURIComponent(config.discord.clientId)}` +
     `&redirect_uri=${encodeURIComponent(`${location.origin}/integrations/discord/callback`)}` +
+    '&response_type=code' +
     `&state=${encodeURIComponent(state)}`,
     title: 'Discord',
     w: 600,

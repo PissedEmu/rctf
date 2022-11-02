@@ -7,7 +7,7 @@ import { privateProfile, publicProfile, updateAccount, updateEmail, deleteEmail 
 import { useToast } from '../components/toast'
 import Form from '../components/form'
 import MembersCard from '../components/profile/members-card'
-import CtftimeCard from '../components/profile/ctftime-card''
+import CtftimeCard from '../components/profile/ctftime-card'
 import DiscordCard from '../components/profile/discord-card'
 import { PublicSolvesCard, PrivateSolvesCard } from '../components/profile/solves-card'
 import TokenPreview from '../components/token-preview'
@@ -18,7 +18,7 @@ import UserCircle from '../icons/user-circle.svg'
 import EnvelopeOpen from '../icons/envelope-open.svg'
 import Rank from '../icons/rank.svg'
 import Ctftime from '../icons/ctftime.svg'
-// import Discord from '../icons/discord.svg'
+import Discord from '../icons/discord.svg'
 import useRecaptcha, { RecaptchaLegalNotice } from '../components/recaptcha'
 
 const SummaryCard = memo(withStyles({
@@ -53,7 +53,7 @@ const SummaryCard = memo(withStyles({
     paddingTop: '15px',
     paddingBottom: '5px'
   }
-}, ({ name, score, division, divisionPlace, globalPlace, ctftimeId, classes, isPrivate }) =>
+}, ({ name, score, division, divisionPlace, globalPlace, ctftimeId, discordId, classes, isPrivate }) =>
   <div class='card'>
     <div class='content'>
       <div class={classes.wrapper}>
@@ -66,6 +66,12 @@ const SummaryCard = memo(withStyles({
           ctftimeId &&
               <a href={`https://ctftime.org/team/${ctftimeId}`} target='_blank' rel='noopener noreferrer'>
                 <Ctftime style='height: 20px;' />
+              </a>
+        }
+        {
+          discordId &&
+              <a href={`https://discordapp.com/users/${discordId}/`} target='_blank' rel='noopener noreferrer'>
+                <Discord style='height: 20px;' />
               </a>
         }
       </div>
@@ -378,10 +384,13 @@ const Profile = ({ uuid, classes }) => {
           {config.ctftime && (
             <CtftimeCard {...{ ctftimeId, onUpdate: onProfileUpdate }} />
           )}
+          {config.discord && (
+            <DiscordCard {...{ discordId, onUpdate: onProfileUpdate }} />
+          )}
         </div>
       )}
       <div class={classes.col}>
-        <SummaryCard {...{ name, score, division, divisionPlace, globalPlace, ctftimeId, isPrivate }} />
+        <SummaryCard {...{ name, score, division, divisionPlace, globalPlace, ctftimeId, discordId, isPrivate }} />
         {isPrivate && config.userMembers && (
           <MembersCard />
         )}
