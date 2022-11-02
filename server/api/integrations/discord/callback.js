@@ -14,7 +14,7 @@ export default {
     body: {
       type: 'object',
       properties: {
-        discordCode:
+        discordCode: {
           type: 'string'
         }
       },
