@@ -9,6 +9,8 @@ import UserCircle from '../icons/user-circle.svg'
 import EnvelopeOpen from '../icons/envelope-open.svg'
 import CtftimeButton from '../components/ctftime-button'
 import CtftimeAdditional from '../components/ctftime-additional'
+import DiscordButton from '../components/discord-button'
+import DiscordAdditional from '../components/discord-additional'
 import AuthOr from '../components/or'
 
 import { loadRecaptcha, requestRecaptchaCode, RecaptchaLegalNotice } from '../components/recaptcha'
@@ -46,6 +48,8 @@ export default withStyles({
     email: '',
     ctftimeToken: undefined,
     ctftimeName: undefined,
+    discordToken: undefined,
+    discordName: undefined,
     disabledButton: false,
     errors: {},
     verifySent: false
@@ -58,9 +62,12 @@ export default withStyles({
     }
   }
 
-  render ({ classes }, { name, email, disabledButton, errors, ctftimeToken, ctftimeName, verifySent }) {
+  render ({ classes }, { name, email, disabledButton, errors, ctftimeToken, ctftimeName, discordToken, discordName, verifySent }) {
     if (ctftimeToken) {
       return <CtftimeAdditional ctftimeToken={ctftimeToken} ctftimeName={ctftimeName} />
+    }
+    if (discordToken) {
+      return <DiscordAdditional discordToken={discordToken} discordName={discordName} />
     }
     if (verifySent) {
       return (
@@ -106,6 +113,12 @@ export default withStyles({
             <CtftimeButton class='col-6' onCtftimeDone={this.handleCtftimeDone} />
           </Fragment>
         )}
+        {config.discord && (
+          <Fragment>
+            <AuthOr />
+            <DiscordButton class='col-6' onDiscordDone={this.handleDiscordDone} />
+          </Fragment>
+        )}
         {recaptchaEnabled && (
           <div class={classes.recaptchaLegalNotice}>
             <RecaptchaLegalNotice />
@@ -129,6 +142,24 @@ export default withStyles({
       this.setState({
         ctftimeToken,
         ctftimeName
+      })
+    }
+  }
+
+  handleDiscordDone = async ({ discordToken, discordName }) => {
+    this.setState({
+      disabledButton: true
+    })
+    const loginRes = await login({
+      discordToken
+    })
+    if (loginRes.authToken) {
+      setAuthToken({ authToken: loginRes.authToken })
+    }
+    if (loginRes.badUnknownUser) {
+      this.setState({
+        discordToken,
+        discordName
       })
     }
   }

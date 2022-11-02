@@ -9,6 +9,8 @@ import { login, setAuthToken } from '../api/auth'
 import IdCard from '../icons/id-card.svg'
 import CtftimeButton from '../components/ctftime-button'
 import CtftimeAdditional from '../components/ctftime-additional'
+import DiscordButton from '../components/discord-button'
+import DiscordAdditional from '../components/discord-additional'
 import AuthOr from '../components/or'
 import PendingToken from '../components/pending-token'
 
@@ -40,6 +42,8 @@ export default withStyles({
     disabledButton: false,
     ctftimeToken: undefined,
     ctftimeName: undefined,
+    discordToken: undefined,
+    discordName: undefined,
     pendingAuthToken: null,
     pendingUserName: null,
     pending: false
@@ -68,9 +72,12 @@ export default withStyles({
     })()
   }
 
-  render ({ classes }, { teamToken, errors, disabledButton, ctftimeToken, ctftimeName, pendingAuthToken, pending }) {
+  render ({ classes }, { teamToken, errors, disabledButton, ctftimeToken, ctftimeName, discordToken, discordName, pendingAuthToken, pending }) {
     if (ctftimeToken) {
       return <CtftimeAdditional ctftimeToken={ctftimeToken} ctftimeName={ctftimeName} />
+    }
+    if (discordToken) {
+      return <DiscordAdditional discordToken={discordToken} discordName={discordName} />
     }
     if (pending) {
       return null
@@ -104,6 +111,12 @@ export default withStyles({
             <CtftimeButton class='col-12' onCtftimeDone={this.handleCtftimeDone} />
           </Fragment>
         )}
+        {config.discord && (
+          <Fragment>
+            <AuthOr />
+            <DiscordButton class='col-12' onDiscordDone={this.handleDiscordDone} />
+          </Fragment>
+        )}
       </div>
     )
   }
@@ -120,6 +133,22 @@ export default withStyles({
       this.setState({
         ctftimeToken,
         ctftimeName
+      })
+    }
+  }
+
+  handleDiscordDone = async ({ discordToken, discordName }) => {
+    this.setState({
+      disabledButton: true
+    })
+    const loginRes = await login({ discordToken })
+    if (loginRes.authToken) {
+      setAuthToken({ authToken: loginRes.authToken })
+    }
+    if (loginRes && loginRes.badUnknownUser) {
+      this.setState({
+        discordToken,
+        discordName
       })
     }
   }

@@ -7,7 +7,8 @@ import { privateProfile, publicProfile, updateAccount, updateEmail, deleteEmail 
 import { useToast } from '../components/toast'
 import Form from '../components/form'
 import MembersCard from '../components/profile/members-card'
-import CtftimeCard from '../components/profile/ctftime-card'
+import CtftimeCard from '../components/profile/ctftime-card''
+import DiscordCard from '../components/profile/discord-card'
 import { PublicSolvesCard, PrivateSolvesCard } from '../components/profile/solves-card'
 import TokenPreview from '../components/token-preview'
 import * as util from '../util'
@@ -17,6 +18,7 @@ import UserCircle from '../icons/user-circle.svg'
 import EnvelopeOpen from '../icons/envelope-open.svg'
 import Rank from '../icons/rank.svg'
 import Ctftime from '../icons/ctftime.svg'
+// import Discord from '../icons/discord.svg'
 import useRecaptcha, { RecaptchaLegalNotice } from '../components/recaptcha'
 
 const SummaryCard = memo(withStyles({
@@ -303,6 +305,7 @@ const Profile = ({ uuid, classes }) => {
     solves,
     teamToken,
     ctftimeId,
+    discordId,
     allowedDivisions
   } = data
   const division = config.divisions[data.division]
@@ -336,13 +339,14 @@ const Profile = ({ uuid, classes }) => {
     }
   }, [uuid, isPrivate, toast])
 
-  const onProfileUpdate = useCallback(({ name, email, divisionId, ctftimeId }) => {
+  const onProfileUpdate = useCallback(({ name, email, divisionId, ctftimeId, discordId }) => {
     setData(data => ({
       ...data,
       name: name === undefined ? data.name : name,
       email: email === undefined ? data.email : email,
       division: divisionId === undefined ? data.division : divisionId,
-      ctftimeId: ctftimeId === undefined ? data.ctftimeId : ctftimeId
+      ctftimeId: ctftimeId === undefined ? data.ctftimeId : ctftimeId,
+      discordId: discordId === undefined ? data.discordId : ctftimeId
     }))
   }, [])
 
