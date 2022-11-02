@@ -36,7 +36,7 @@ export default {
           client_secret: config.discord.clientSecret,
           grant_type: 'authorization_code',
           code: req.body.discordCode,
-          redirect_uri: config.origin + '/integrations/discord/callback'
+          redirect_uri: `${config.origin}/integrations/discord/callback`
         }
       }))
     } catch (e) {
