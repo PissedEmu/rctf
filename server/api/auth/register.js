@@ -27,6 +27,9 @@ export default {
         ctftimeToken: {
           type: 'string'
         },
+        discordToken: {
+          type: 'string'
+        },
         recaptchaCode: {
           type: 'string'
         }
@@ -36,6 +39,8 @@ export default {
         required: ['email', 'name']
       }, {
         required: ['ctftimeToken']
+      }, {
+        required: ['discordToken']
       }]
     }
   },
@@ -47,6 +52,7 @@ export default {
     let email
     let reqName
     let ctftimeId
+    let discordId
     if (req.body.ctftimeToken !== undefined) {
       const ctftimeData = await auth.token.getData(auth.token.tokenKinds.ctftimeAuth, req.body.ctftimeToken)
       if (ctftimeData === null) {
@@ -54,6 +60,13 @@ export default {
       }
       reqName = ctftimeData.name
       ctftimeId = ctftimeData.ctftimeId
+    } else if (req.body.discordToken !== undefined) {
+      const discordData = await auth.token.getData(auth.token.tokenKinds.discordAuth, req.body.discordToken)
+      if (discordData === null) {
+        return responses.badDiscordToken
+      }
+      reqName = discordData.name
+      discordId = discordData.discordId
     } else {
       email = util.normalize.normalizeEmail(req.body.email)
       if (!emailValidator.validate(email)) {
@@ -75,7 +88,8 @@ export default {
         division,
         email,
         name,
-        ctftimeId
+        ctftimeId,
+        discordId
       })
     }
 
@@ -91,6 +105,14 @@ export default {
         division,
         name,
         ctftimeId
+      })
+    }
+
+    if (req.body.discordToken !== undefined) {
+      return auth.register.register({
+        division,
+        name,
+        discordId
       })
     }
 

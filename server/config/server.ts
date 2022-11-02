@@ -51,6 +51,11 @@ export type ServerConfig = {
     clientSecret: string;
   }
 
+  discord?: {
+    clientId: string;
+    clientSecret: string;
+  }
+
   userMembers: boolean;
   sponsors: Sponsor[];
   homeContent: string;
@@ -141,6 +146,10 @@ const envConfig: PartialDeep<ServerConfig> = {
   ctftime: {
     clientId: process.env.RCTF_CTFTIME_CLIENT_ID,
     clientSecret: process.env.RCTF_CTFTIME_CLIENT_SECRET
+  },
+  discord: {
+    clientId: process.env.RCTF_DISCORD_CLIENT_ID,
+    clientSecret: process.env.RCTF_DISCORD_CLIENT_SECRET
   },
   userMembers: nullsafeParseBoolEnv(process.env.RCTF_USER_MEMBERS),
   homeContent: process.env.RCTF_HOME_CONTENT,

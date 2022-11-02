@@ -71,6 +71,10 @@ export const responseList = {
     status: 409,
     message: 'An account with this CTFtime ID already exists.'
   },
+  badKnownDiscordId: {
+    status: 409,
+    message: 'An account with this Discord ID already exists.'
+  },
   goodLeaderboard: {
     status: 200,
     message: 'The leaderboard was retrieved.'
@@ -83,13 +87,25 @@ export const responseList = {
     status: 200,
     message: 'The CTFtime token was created.'
   },
+  goodDiscordToken: {
+    status: 200,
+    message: 'The Discord token was created.'
+  },
   goodCtftimeAuthSet: {
     status: 200,
     message: 'The CTFtime team was successfully updated.'
   },
+  goodDiscordAuthSet: {
+    status: 200,
+    message: 'The Discord user was successfully updated.'
+  },
   goodCtftimeRemoved: {
     status: 200,
     message: 'The CTFtime team was removed from the user.'
+  },
+  goodDiscordRemoved: {
+    status: 200,
+    message: 'The Discord user was removed from the user.'
   },
   goodEmailSet: {
     status: 200,
@@ -103,6 +119,10 @@ export const responseList = {
     status: 404,
     message: 'There is no CTFtime team associated with the user.'
   },
+  badDiscordNoExists: {
+    status: 404,
+    message: 'There is no Discord user associated with the user.'
+  },
   badZeroAuth: {
     status: 409,
     message: 'At least one authentication method is required.'
@@ -114,6 +134,10 @@ export const responseList = {
   badCtftimeCode: {
     status: 401,
     message: 'The CTFtime code is invalid.'
+  },
+  badDiscordCode: {
+    status: 401,
+    message: 'The Discord code is invalid.'
   },
   goodFlag: {
     status: 200,

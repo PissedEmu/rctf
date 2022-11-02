@@ -11,7 +11,8 @@ export enum tokenKinds {
   auth = 0,
   team = 1,
   verify = 2,
-  ctftimeAuth = 4
+  ctftimeAuth = 4,
+  discordAuth = 5
 }
 
 export type VerifyTokenKinds = 'update' | 'register' | 'recover'
@@ -52,6 +53,11 @@ export interface CtftimeAuthTokenData {
   ctftimeId: User['ctftimeId']
 }
 
+export interface DiscordAuthTokenData {
+  name: User['name']
+  discordId: User['discordId']
+}
+
 // Internal map of type definitions for typing purposes only -
 // this type does not describe a real data-structure
 type TokenDataTypes = {
@@ -59,6 +65,7 @@ type TokenDataTypes = {
   [tokenKinds.team]: TeamTokenData;
   [tokenKinds.verify]: VerifyTokenData;
   [tokenKinds.ctftimeAuth]: CtftimeAuthTokenData;
+  [tokenKinds.discordAuth]: DiscordAuthTokenData;
 }
 
 export type Token = string
@@ -73,7 +80,8 @@ const tokenExpiries: Record<ValueOf<typeof tokenKinds>, number> = {
   [tokenKinds.auth]: Infinity,
   [tokenKinds.team]: Infinity,
   [tokenKinds.verify]: config.loginTimeout,
-  [tokenKinds.ctftimeAuth]: config.loginTimeout
+  [tokenKinds.ctftimeAuth]: config.loginTimeout,
+  [tokenKinds.discordAuth]: config.loginTimeout
 }
 
 const timeNow = () => Math.floor(Date.now() / 1000)

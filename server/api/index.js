@@ -6,6 +6,7 @@ const routes = [
   ...require('./leaderboard').default,
   ...require('./challs').default,
   ...require('./integrations/ctftime').default,
+  ...require('./integrations/discord').default,
   ...require('./integrations/client').default,
   ...require('./users').default,
   ...require('./auth').default,

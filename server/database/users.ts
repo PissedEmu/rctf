@@ -10,6 +10,7 @@ export interface User {
   email?: string;
   division: keyof ServerConfig['divisions'];
   ctftimeId?: string;
+  discordId?: string;
   perms: number;
 }
 
@@ -33,6 +34,11 @@ export const getUserByCtftimeId = ({ ctftimeId }: Pick<User, 'ctftimeId'>): Prom
     .then(res => res.rows[0])
 }
 
+export const getUserByDiscordId = ({ discordId }: Pick<User, 'discordId'>): Promise<User | undefined> => {
+  return db.query<User>('SELECT * FROM users WHERE discord_id = $1', [discordId])
+    .then(res => res.rows[0])
+}
+
 export const getUserByIdAndEmail = ({ id, email }: Pick<User, 'id' | 'email'>): Promise<User | undefined> => {
   return db.query<User>('SELECT * FROM users WHERE id = $1 AND email = $2', [id, email])
     .then(res => res.rows[0])
@@ -48,6 +54,11 @@ export const getUserByNameOrCtftimeId = ({ name, ctftimeId }: Pick<User, 'name' 
     .then(res => res.rows[0])
 }
 
+export const getUserByNameOrDiscordId = ({ name, discordId }: Pick<User, 'name' | 'discordId'>): Promise<User | undefined> => {
+  return db.query<User>('SELECT * FROM users WHERE name = $1 OR discord_id = $2', [name, discordId])
+    .then(res => res.rows[0])
+}
+
 export const removeUserByEmail = ({ email }: Pick<User, 'email'>): Promise<User | undefined> => {
   return db.query<User>('DELETE FROM users WHERE email = $1 RETURNING *', [email])
     .then(res => res.rows[0])
@@ -58,12 +69,12 @@ export const removeUserById = ({ id }: Pick<User, 'id'>): Promise<User | undefin
     .then(res => res.rows[0])
 }
 
-export const makeUser = ({ id, name, email, division, ctftimeId, perms }: User): Promise<User> => {
+export const makeUser = ({ id, name, email, division, ctftimeId, discordId, perms }: User): Promise<User> => {
   if (config.email && config.divisionACLs && !util.restrict.divisionAllowed(email, division)) {
     throw new DivisionACLError()
   }
-  return db.query<User>('INSERT INTO users (id, name, email, division, ctftime_id, perms) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
-    [id, name, email, division, ctftimeId, perms]
+  return db.query<User>('INSERT INTO users (id, name, email, division, ctftime_id, discord_id, perms) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
+    [id, name, email, division, ctftimeId, discordId, perms]
   )
     .then(res => res.rows[0])
 }
@@ -73,12 +84,17 @@ export const removeCtftimeId = ({ id }: Pick<User, 'id'>): Promise<User | undefi
     .then(res => res.rows[0])
 }
 
+export const removeDiscordId = ({ id }: Pick<User, 'id'>): Promise<User | undefined> => {
+  return db.query<User>('UPDATE users SET discord_id = NULL WHERE id = $1 AND discord_id IS NOT NULL RETURNING *', [id])
+    .then(res => res.rows[0])
+}
+
 export const removeEmail = ({ id }: Pick<User, 'id'>): Promise<User | undefined> => {
   return db.query<User>('UPDATE users SET email = NULL WHERE id = $1 AND email IS NOT NULL RETURNING *', [id])
     .then(res => res.rows[0])
 }
 
-export const updateUser = async ({ id, name, email, division, ctftimeId, perms }: Pick<User, 'id'> & Partial<User>): Promise<User | undefined> => {
+export const updateUser = async ({ id, name, email, division, ctftimeId, discordId, perms }: Pick<User, 'id'> & Partial<User>): Promise<User | undefined> => {
   if (config.email && config.divisionACLs) {
     if (!email || !division) {
       const user = await getUserById({ id })
@@ -98,11 +114,12 @@ export const updateUser = async ({ id, name, email, division, ctftimeId, perms }
         name = COALESCE($1, name),
         email = COALESCE($2, email),
         division = COALESCE($3, division),
-        ctftime_id = COALESCE($4, ctftime_id),
+        ctftime_id = coalesce($4, ctftime_id),
+        discord_id = coalesce($4, discord_id),
         perms = COALESCE($5, perms)
       WHERE id = $6 RETURNING *
       `,
-  [name, email, division, ctftimeId, perms, id]
+  [name, email, division, ctftimeId, discordId, perms, id]
   )
     .then(res => res.rows[0])
 }
