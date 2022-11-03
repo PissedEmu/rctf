@@ -16,6 +16,7 @@ import Scoreboard from './routes/scoreboard'
 import Recover from './routes/recover'
 import Verify from './routes/verify'
 import CtftimeCallback from './routes/ctftime-callback'
+import DiscordCallback from './routes/discord-callback'
 
 import AdminChallenges from './routes/admin/challs'
 
@@ -56,7 +57,8 @@ function App ({ classes }) {
     <Scoreboard key='scoreboard' path='/scores' name='Scoreboard' />,
     <Profile key='multiProfile' path='/profile/:uuid' />,
     <Verify key='verify' path='/verify' />,
-    <CtftimeCallback key='ctftimeCallback' path='/integrations/ctftime/callback' />
+    <CtftimeCallback key='ctftimeCallback' path='/integrations/ctftime/callback' />,
+    <DiscordCallback key='discordCallback' path='/integrations/discord/callback' />
   ]
 
   loggedInPaths.forEach(route => loggedOutPaths.push(

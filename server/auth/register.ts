@@ -5,7 +5,7 @@ import { responses } from '../responses'
 import { ValueOf } from 'type-fest'
 
 export const register = async (
-  { division, email, name, ctftimeId }: Pick<User, 'division' | 'email' | 'name' | 'ctftimeId'>
+  { division, email, name, ctftimeId, discordId }: Pick<User, 'division' | 'email' | 'name' | 'ctftimeId' | 'discordId'>
 ): Promise<[typeof responses.goodRegister, { authToken: string }] | ValueOf<typeof responses>> => {
   const userUuid = uuidv4()
   try {
@@ -15,6 +15,7 @@ export const register = async (
       name,
       id: userUuid,
       ctftimeId,
+      discordId,
       perms: 0
     })
   } catch (e) {
@@ -22,6 +23,9 @@ export const register = async (
       const { constraint } = e as { constraint?: string }
       if (constraint === 'users_ctftime_id_key') {
         return responses.badKnownCtftimeId
+      }
+      if (constraint === 'users_discord_id_key') {
+        return responses.badKnownDiscordId
       }
       if (constraint === 'users_email_key') {
         return responses.badKnownEmail

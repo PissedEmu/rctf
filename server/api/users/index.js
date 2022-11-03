@@ -9,5 +9,6 @@ export default [
   require('./id').default,
   require('./update').default,
   ...require('./me-auth/ctftime').default,
+  ...require('./me-auth/discord').default,
   ...require('./me-auth/email').default
 ]

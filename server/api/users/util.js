@@ -54,6 +54,7 @@ export const getUserData = async ({ user }) => {
   return {
     name: user.name,
     ctftimeId: user.ctftime_id,
+    discordId: user.discord_id,
     division: user.division,
     score: score.score,
     globalPlace: score.globalPlace,

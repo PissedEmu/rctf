@@ -15,12 +15,17 @@ export default {
         },
         ctftimeToken: {
           type: 'string'
+        },
+        discordToken: {
+          type: 'string'
         }
       },
       oneOf: [{
         required: ['teamToken']
       }, {
         required: ['ctftimeToken']
+      }, {
+        required: ['discordToken']
       }]
     }
   },
@@ -32,6 +37,12 @@ export default {
         return responses.badCtftimeToken
       }
       user = await database.users.getUserByCtftimeId({ ctftimeId: ctftimeData.ctftimeId })
+    } else if (req.body.discordToken !== undefined) {
+      const discordData = await auth.token.getData(auth.token.tokenKinds.discordAuth, req.body.discordToken)
+      if (discordData === null) {
+        return responses.badDiscordToken
+      }
+      user = await database.users.getUserByDiscordId({ discordId: discordData.discordId })
     } else {
       const uuid = await auth.token.getData(auth.token.tokenKinds.team, req.body.teamToken)
       if (uuid === null) {

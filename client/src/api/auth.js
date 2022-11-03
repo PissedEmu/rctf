@@ -6,10 +6,11 @@ export const setAuthToken = ({ authToken }) => {
   route('/profile')
 }
 
-export const login = async ({ teamToken, ctftimeToken }) => {
+export const login = async ({ teamToken, ctftimeToken, discordToken }) => {
   const resp = await request('POST', '/auth/login', {
     teamToken,
-    ctftimeToken
+    ctftimeToken,
+    discordToken
   })
   switch (resp.kind) {
     case 'goodLogin':
@@ -58,11 +59,12 @@ export const verify = async ({ verifyToken }) => {
   }
 }
 
-export const register = async ({ email, name, ctftimeToken, recaptchaCode }) => {
+export const register = async ({ email, name, ctftimeToken, discordToken, recaptchaCode }) => {
   const resp = await request('POST', '/auth/register', {
     email,
     name,
     ctftimeToken,
+    discordToken,
     recaptchaCode
   })
   switch (resp.kind) {
@@ -104,14 +106,30 @@ export const ctftimeCallback = ({ ctftimeCode }) => {
   })
 }
 
+export const discordCallback = ({ discordCode }) => {
+  return request('POST', '/integrations/discord/callback', {
+    discordCode
+  })
+}
+
 export const putCtftime = ({ ctftimeToken }) => {
   return request('PUT', '/users/me/auth/ctftime', {
     ctftimeToken
   })
 }
 
+export const putDiscord = ({ discordToken }) => {
+  return request('PUT', '/users/me/auth/discord', {
+    discordToken
+  })
+}
+
 export const deleteCtftime = () => {
   return request('DELETE', '/users/me/auth/ctftime')
+}
+
+export const deleteDiscord = () => {
+  return request('DELETE', '/users/me/auth/discord')
 }
 
 export const recover = async ({ email, recaptchaCode }) => {
