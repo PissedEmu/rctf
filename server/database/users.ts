@@ -115,9 +115,9 @@ export const updateUser = async ({ id, name, email, division, ctftimeId, discord
         email = COALESCE($2, email),
         division = COALESCE($3, division),
         ctftime_id = coalesce($4, ctftime_id),
-        discord_id = coalesce($4, discord_id),
-        perms = COALESCE($5, perms)
-      WHERE id = $6 RETURNING *
+        discord_id = coalesce($5, discord_id),
+        perms = COALESCE($6, perms)
+      WHERE id = $7 RETURNING *
       `,
   [name, email, division, ctftimeId, discordId, perms, id]
   )
